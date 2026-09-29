@@ -4,4 +4,27 @@ version = "0.1.0"
 edition = "2024"
 
 [dependencies]
+anyhow = "1.0.104"
+async-channel = "2.5.0"
+chromiumoxide = "0.9.1"
+directories = "6.0.0"
+futures = "0.3.34"
 gpui-kit = "0.7.0"
+indexmap = "2.14.2"
+jiff = { version = "0.2.37", default-features = false, features = ["std"] }
+reqwest = { version = "0.13.5", default-features = false, features = ["rustls", "http2", "charset", "gzip"] }
+rfd = "0.17.2"
+ron = "0.12.2"
+rust-i18n = "4.2.3"
+scraper = "0.27.0"
+serde = { version = "1.0.229", features = ["derive"] }
+thiserror = "2.0.21"
+tokio = { version = "1.53.1", features = ["rt-multi-thread", "macros", "time", "process", "sync"] }
+walkdir = "2.5.0"
+windows-registry = "0.100.0"
+
+[target."cfg(windows)".dependencies]
+junction = "2.1.0"
+
+[build-dependencies]
+winresource = "0.1.31"
