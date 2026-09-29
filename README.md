@@ -1,5 +1,7 @@
 # Timedivers Manager V2 (Rust)
 
+[![CI](https://github.com/AbyssRei/timedivers-manager-rs/actions/workflows/ci.yml/badge.svg)](https://github.com/AbyssRei/timedivers-manager-rs/actions/workflows/ci.yml)
+
 Version manager for Steam games, rewritten in **Rust** with [gpui-kit](https://gpui-kit.com/).
 A faithful port of the original Python/Tkinter [timedivers-manager-v2](https://github.com/leem919/timedivers-manager-v2):
 download historical versions of a Steam game and switch between them instantly using NTFS junctions.
