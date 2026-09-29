@@ -1,7 +1,9 @@
+use super::browser_select::{BrowserSelectView, start_scrape};
 use super::dialogs::{DialogSpec, show_dialog};
+use super::{push_notification, t};
 use gpui_kit::component::{
-    ActiveTheme, Disableable as _, IndexPath, Sizable as _, WindowExt as _,
-    button::{Button, ButtonVariants as _},
+    ActiveTheme, Disableable as _, IndexPath, Sizable as _,
+    button::Button,
     checkbox::Checkbox,
     h_flex,
     input::{Input, InputState},
@@ -19,19 +21,10 @@ use crate::manifest::{
     ManifestEntry, ManifestMap, ManifestSizes, load_manifest_sizes, load_manifests, patch_title_of,
 };
 use crate::paths::AppPaths;
-use crate::scraper::{self, BrowserInfo};
+use crate::scraper;
 use crate::steam::detect::{SteamGame, detect_games, sorted_by_name};
 use crate::steam::{junctions, paths};
 use crate::ui::console_view::{ConsoleSession, ConsoleView};
-use crate::ui::scraper_log::ScraperLogView;
-
-fn t(key: &'static str) -> String {
-    rust_i18n::t!(key).to_string()
-}
-
-fn push_notification(window: &mut Window, cx: &mut App, notification: Notification) {
-    window.push_notification(notification, cx);
-}
 
 #[derive(Clone)]
 pub struct VersionRow {
@@ -44,7 +37,7 @@ pub struct VersionRow {
 
 /// The main window view, mirroring `VersionManagerApp`.
 pub struct AppView {
-    paths: AppPaths,
+    pub(crate) paths: AppPaths,
     pub config: AppConfig,
     games: Vec<SteamGame>,
     manifests: ManifestMap,
@@ -64,7 +57,7 @@ pub struct AppView {
     selected_version: Option<usize>,
     managed: bool,
     needs_select_rebuild: bool,
-    weak: gpui_kit::WeakEntity<Self>,
+    pub(crate) weak: gpui_kit::WeakEntity<Self>,
 }
 
 impl AppView {
@@ -940,155 +933,6 @@ impl AppView {
     }
 
     // endregion
-}
-
-fn start_scrape(
-    weak: &gpui_kit::WeakEntity<AppView>,
-    browser: BrowserInfo,
-    window: &mut Window,
-    cx: &mut App,
-) {
-    weak.update(cx, |view, cx| {
-        let Some(game) = view.current_game().cloned() else {
-            return;
-        };
-        match scraper::start_scraper(
-            game.app_id.clone(),
-            game.depots.clone(),
-            browser,
-            view.paths.data_dir.clone(),
-        ) {
-            Ok(session) => ScraperLogView::open(view.weak.clone(), session, cx),
-            Err(err) => push_notification(window, cx, Notification::error(format!("{err:#}"))),
-        }
-    })
-    .ok();
-}
-
-/// Small modal window for choosing which browser to scrape with (mirrors the
-/// original `Select Browser` dialog).
-struct BrowserSelectView {
-    browsers: Vec<BrowserInfo>,
-    selected: Option<usize>,
-    app_view: gpui_kit::WeakEntity<AppView>,
-}
-
-impl BrowserSelectView {
-    fn open(
-        app_view: gpui_kit::WeakEntity<AppView>,
-        browsers: Vec<BrowserInfo>,
-        _window: &mut Window,
-        cx: &mut App,
-    ) {
-        let bounds = gpui_kit::WindowBounds::Windowed(gpui_kit::Bounds {
-            origin: gpui_kit::point(gpui_kit::px(320.), gpui_kit::px(260.)),
-            size: gpui_kit::size(gpui_kit::px(320.), gpui_kit::px(220.)),
-        });
-        let _ = open_window(
-            WindowOptions {
-                window_bounds: Some(bounds),
-                titlebar: Some(gpui_kit::TitlebarOptions {
-                    title: Some(t("scraper.select_browser_title").into()),
-                    appears_transparent: false,
-                    traffic_light_position: None,
-                }),
-                kind: gpui_kit::WindowKind::Dialog,
-                is_resizable: false,
-                ..Default::default()
-            },
-            cx,
-            |_, cx| {
-                cx.new(|_| Self {
-                    browsers,
-                    selected: Some(0),
-                    app_view,
-                })
-            },
-        );
-    }
-
-    fn confirm(&mut self, window: &mut Window, cx: &mut Context<Self>) {
-        if let Some(ix) = self.selected {
-            let browser = self.browsers[ix].clone();
-            let app_view = self.app_view.clone();
-            window.remove_window();
-            start_scrape(&app_view, browser, window, cx);
-        }
-    }
-
-    fn on_select_click(
-        &mut self,
-        _: &gpui_kit::ClickEvent,
-        window: &mut Window,
-        cx: &mut Context<Self>,
-    ) {
-        self.confirm(window, cx);
-    }
-}
-
-impl Render for BrowserSelectView {
-    fn render(&mut self, _window: &mut Window, cx: &mut Context<Self>) -> impl IntoElement {
-        let view = cx.entity();
-        let list = uniform_list(
-            "browsers",
-            self.browsers.len(),
-            move |range, _window, cx| {
-                let this = view.read(cx);
-                let hover = cx.theme().list_hover;
-                let active = cx.theme().list_active;
-                let fg = cx.theme().foreground;
-                range
-                    .map(|ix| {
-                        let selected = this.selected == Some(ix);
-                        let row_view = view.clone();
-                        let name = this.browsers[ix].name.clone();
-                        div()
-                            .id(ix)
-                            .w_full()
-                            .h(px(28.))
-                            .px_2()
-                            .flex()
-                            .items_center()
-                            .rounded_sm()
-                            .text_color(fg)
-                            .bg(if selected {
-                                active
-                            } else {
-                                hsla(0., 0., 0., 0.)
-                            })
-                            .hover(move |style| style.bg(hover))
-                            .on_click(move |_, _window, cx| {
-                                row_view.update(cx, |v, cx| {
-                                    v.selected = Some(ix);
-                                    cx.notify();
-                                });
-                            })
-                            .child(SharedString::from(format!("  {name}")))
-                    })
-                    .collect()
-            },
-        )
-        .flex_1()
-        .min_h_0();
-
-        v_flex()
-            .size_full()
-            .bg(cx.theme().background)
-            .text_color(cx.theme().foreground)
-            .p_4()
-            .gap_2()
-            .child(div().child(t("scraper.select_browser")))
-            .child(list)
-            .child(
-                div().flex().justify_center().child(
-                    Button::new("select")
-                        .label(t("scraper.select"))
-                        .primary()
-                        .small()
-                        .on_click(cx.listener(Self::on_select_click)),
-                ),
-            )
-    }
 }
 
 impl Render for AppView {

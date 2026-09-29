@@ -9,6 +9,7 @@ use gpui_kit::component::{
 use gpui_kit::*;
 
 use crate::scraper::{ScraperEvent, ScraperSession};
+use crate::util::window_options;
 
 /// The scraper log window (650x400, monospace), mirroring `ScraperLogWindow`.
 pub struct ScraperLogView {
@@ -28,18 +29,7 @@ impl ScraperLogView {
     ) {
         let events = Arc::new(session.events);
         let (any_handle, view) = open_window(
-            WindowOptions {
-                window_bounds: Some(gpui_kit::WindowBounds::Windowed(gpui_kit::Bounds {
-                    origin: gpui_kit::point(gpui_kit::px(160.), gpui_kit::px(160.)),
-                    size: gpui_kit::size(gpui_kit::px(650.), gpui_kit::px(400.)),
-                })),
-                titlebar: Some(gpui_kit::TitlebarOptions {
-                    title: Some("Scraper".into()),
-                    appears_transparent: false,
-                    traffic_light_position: None,
-                }),
-                ..Default::default()
-            },
+            window_options("Scraper", (160., 160.), (650., 400.), false),
             cx,
             |_, cx| {
                 cx.new(|_| Self {

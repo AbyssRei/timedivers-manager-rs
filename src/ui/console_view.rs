@@ -17,6 +17,7 @@ use crate::download::depot_watch::{
 };
 use crate::download::steam_console;
 use crate::manifest::ManifestEntry;
+use crate::util::window_options;
 
 enum ConsoleMsg {
     Progress(usize, usize),
@@ -146,10 +147,6 @@ impl ConsoleView {
             String::new()
         };
         let title = format!("Steam Console Import — {game_name}{branch_label} {version_date}");
-        let bounds = gpui_kit::WindowBounds::Windowed(gpui_kit::Bounds {
-            origin: gpui_kit::point(gpui_kit::px(120.), gpui_kit::px(120.)),
-            size: gpui_kit::size(gpui_kit::px(740.), gpui_kit::px(520.)),
-        });
         let meta_path = data_dir.join("depot_meta").join(format!("{app_id}.ron"));
 
         // Take two quick rounds of snapshots so already-downloaded depots show
@@ -200,17 +197,7 @@ impl ConsoleView {
         watcher.seed(&depots, &initial, t0);
         let depot_watches = watcher.poll(&depots, &initial, t0 + Duration::from_millis(300));
         let (any_handle, view) = open_window(
-            WindowOptions {
-                window_bounds: Some(bounds),
-                titlebar: Some(gpui_kit::TitlebarOptions {
-                    title: Some(title.into()),
-                    appears_transparent: false,
-                    traffic_light_position: None,
-                }),
-                kind: gpui_kit::WindowKind::Dialog,
-                is_resizable: false,
-                ..Default::default()
-            },
+            window_options(title, (120., 120.), (740., 520.), true),
             cx,
             |_, cx| {
                 cx.new(|_| Self {
