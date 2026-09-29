@@ -30,3 +30,9 @@ winresource = "0.1.31"
 
 [profile.release]
 lto = "thin"
+
+# Thin LTO gives the exe an export table, so the MSVC linker prints a
+# localized "Creating library ..." info line on release links; the
+# `linker_messages` lint would surface that pure noise as a warning.
+[lints.rust]
+linker_messages = "allow"
