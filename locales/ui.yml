@@ -1,0 +1,296 @@
+_version: 2
+
+app:
+  folders_label:
+    en: "Steamapps Folders:"
+    zh-CN: "steamapps 目录："
+  game:
+    en: "Game:"
+    zh-CN: "游戏："
+  depot_downloader:
+    en: "Depot Downloader"
+    zh-CN: "Depot Downloader（仓库下载器）"
+  username_label:
+    en: "Steam Username:"
+    zh-CN: "Steam 用户名："
+  remember_password:
+    en: "Remember Password"
+    zh-CN: "记住密码"
+  available_versions:
+    en: "Available Versions:"
+    zh-CN: "可用版本："
+  sort_by_downloaded:
+    en: "Sort by Downloaded"
+    zh-CN: "已下载优先排序"
+  download_version:
+    en: "Download Version"
+    zh-CN: "下载版本"
+  using_steam_console:
+    en: "using Steam Console"
+    zh-CN: "使用 Steam 控制台"
+  using_depot_downloader:
+    en: "using Depot Downloader"
+    zh-CN: "使用 Depot Downloader"
+  set_active_version:
+    en: "Set Active Version"
+    zh-CN: "设为当前版本"
+  delete_version:
+    en: "Delete Version"
+    zh-CN: "删除版本"
+  update_manifests:
+    en: "Update Manifests"
+    zh-CN: "更新版本清单"
+  setup_folders:
+    en: "Setup Folders"
+    zh-CN: "初始化目录"
+  revert_folders:
+    en: "Revert Folders"
+    zh-CN: "还原目录"
+
+version:
+  steam:
+    en: "Steam Version"
+    zh-CN: "Steam 版本"
+
+common:
+  add:
+    en: "Add"
+    zh-CN: "添加"
+  remove:
+    en: "Remove"
+    zh-CN: "移除"
+  ok:
+    en: "OK"
+    zh-CN: "确定"
+  cancel:
+    en: "Cancel"
+    zh-CN: "取消"
+  close:
+    en: "Close"
+    zh-CN: "关闭"
+  refresh:
+    en: "Refresh"
+    zh-CN: "刷新"
+  delete:
+    en: "Delete"
+    zh-CN: "删除"
+  yes:
+    en: "Yes"
+    zh-CN: "是"
+  no:
+    en: "No"
+    zh-CN: "否"
+  not_allowed:
+    en: "Not Allowed"
+    zh-CN: "不允许的操作"
+  already_downloaded:
+    en: "Already Downloaded"
+    zh-CN: "版本已下载"
+  missing_folder:
+    en: "Missing Folder"
+    zh-CN: "目录不存在"
+  delete_failed:
+    en: "Delete Failed"
+    zh-CN: "删除失败"
+  switch_failed:
+    en: "Switch Failed"
+    zh-CN: "切换失败"
+  setup_failed:
+    en: "Setup Failed"
+    zh-CN: "初始化失败"
+  setup_warning:
+    en: "Setup Warning"
+    zh-CN: "初始化警告"
+  manual_step:
+    en: "Manual Step Required"
+    zh-CN: "需要手动操作"
+  revert_failed:
+    en: "Revert Failed"
+    zh-CN: "还原失败"
+  revert_complete:
+    en: "Revert Complete"
+    zh-CN: "还原完成"
+  error:
+    en: "Error"
+    zh-CN: "错误"
+
+folders:
+  pick_title:
+    en: "Select Steamapps Folder"
+    zh-CN: "选择 steamapps 目录"
+  unusual_title:
+    en: "Unusual Folder"
+    zh-CN: "非常规目录"
+  unusual:
+    en: "This folder isn't named 'steamapps':\n%{folder}\n\nAdd anyway?"
+    zh-CN: "该目录名称不是 'steamapps'：\n%{folder}\n\n仍要添加吗？"
+
+warn:
+  steam_client:
+    en: "Use the Steam client for the Steam version."
+    zh-CN: "Steam 版本请直接使用 Steam 客户端。"
+  active_download:
+    en: "Cannot download the currently active version."
+    zh-CN: "无法下载当前激活的版本。"
+  active_import:
+    en: "Cannot import the currently active version."
+    zh-CN: "无法导入当前激活的版本。"
+  active_delete:
+    en: "Cannot delete the currently active version."
+    zh-CN: "无法删除当前激活的版本。"
+  delete_steam:
+    en: "Cannot delete the Steam version."
+    zh-CN: "无法删除 Steam 版本。"
+  already_downloaded:
+    en: "Version %{date} (%{branch}) is already downloaded."
+    zh-CN: "版本 %{date}（%{branch}）已下载。"
+
+err:
+  missing_folder:
+    en: "Version folder not found:\n%{path}"
+    zh-CN: "版本目录不存在：\n%{path}"
+  switch_remove:
+    en: "Could not remove junction:\n%{error}"
+    zh-CN: "移除目录联接（junction）失败：\n%{error}"
+  switch_create:
+    en: "Could not create junction:\n%{error}"
+    zh-CN: "创建目录联接（junction）失败：\n%{error}"
+  setup_junction:
+    en: "Could not create junction:\n%{error}"
+    zh-CN: "创建目录联接（junction）失败：\n%{error}"
+  junction_failed:
+    en: "Rename succeeded but junction creation failed:\n%{error}\n\nThe rename has been undone."
+    zh-CN: "重命名成功，但创建目录联接（junction）失败：\n%{error}\n\n已撤销重命名。"
+  revert_redirect:
+    en: "Could not redirect junction:\n%{error}"
+    zh-CN: "重定向目录联接（junction）失败：\n%{error}"
+  revert_remove:
+    en: "Could not remove junction:\n%{error}"
+    zh-CN: "移除目录联接（junction）失败：\n%{error}"
+  rename_failed:
+    en: "Could not rename folder:\n%{error}\n\nPlease rename manually:\n  From: %{installdir}_steam\n  To: %{installdir}"
+    zh-CN: "重命名目录失败：\n%{error}\n\n请手动重命名：\n  从：%{installdir}_steam\n  到：%{installdir}"
+
+dlg:
+  confirm_delete_title:
+    en: "Confirm Delete"
+    zh-CN: "确认删除"
+  confirm_delete:
+    en: "Delete version '%{date}' [%{branch}]?\n\n%{path}"
+    zh-CN: "删除版本 '%{date}' [%{branch}]？\n\n%{path}"
+  setup_message:
+    en: "This will:\n\n  • Rename '%{installdir}' to '%{installdir}_steam'\n  • Create a junction '%{installdir}' pointing to it\n\nThe game will continue to work normally. This only needs to be done once.\n\nProceed?"
+    zh-CN: "此操作将：\n\n  • 把 '%{installdir}' 重命名为 '%{installdir}_steam'\n  • 创建指向它的目录联接 '%{installdir}'\n\n游戏仍可正常运行。此操作只需执行一次。\n\n是否继续？"
+  setup_both_exist:
+    en: "Both folders already exist:\n  %{active}\n  %{steam}\n\nPlease resolve manually and restart."
+    zh-CN: "两个目录都已存在：\n  %{active}\n  %{steam}\n\n请手动处理后重新打开程序。"
+  setup_game_missing:
+    en: "Game folder not found:\n%{path}\n\nMake sure the game is installed."
+    zh-CN: "未找到游戏目录：\n%{path}\n\n请确认游戏已安装。"
+  manual_step:
+    en: "Windows prevented the rename.\n\nPlease rename manually in File Explorer:\n  From: %{installdir}\n  To:   %{installdir}_steam\n\nLocation: %{common}\n\nThen run the folder setup again. The junction will be created."
+    zh-CN: "Windows 拒绝了重命名操作。\n\n请在文件资源管理器中手动重命名：\n  从：%{installdir}\n  到：  %{installdir}_steam\n\n位置：%{common}\n\n然后再次执行目录初始化，程序会创建目录联接。"
+  revert_message:
+    en: "This will:\n\n  • Remove the junction\n  • Rename '%{installdir}_steam' back to '%{installdir}'\n\nDownloaded version folders will remain on disk.\n\nContinue?"
+    zh-CN: "此操作将：\n\n  • 移除目录联接\n  • 把 '%{installdir}_steam' 重命名回 '%{installdir}'\n\n已下载的版本目录会保留在磁盘上。\n\n是否继续？"
+  revert_no_steam:
+    en: "Steam version folder not found:\n%{path}\n\nThe Steam version must be present to revert."
+    zh-CN: "未找到 Steam 版本目录：\n%{path}\n\n还原前必须存在 Steam 版本。"
+  revert_no_folder:
+    en: "Steam folder not found:\n%{path}\n\nPlease rename manually:\n  From: %{installdir}_steam\n  To: %{installdir}"
+    zh-CN: "未找到 Steam 目录：\n%{path}\n\n请手动重命名：\n  从：%{installdir}_steam\n  到：%{installdir}"
+
+info:
+  revert_complete:
+    en: "Folder setup reverted.\n\nDownloaded version folders remain on disk and can be deleted manually."
+    zh-CN: "目录设置已还原。\n\n已下载的版本目录仍保留在磁盘上，可手动删除。"
+
+scraper:
+  confirm_title:
+    en: "Update List"
+    zh-CN: "更新版本清单"
+  confirm_message:
+    en: "A Chromium-based browser will be used to scrape SteamDB.\n\nIt will be restarted in debug mode. Please ensure you are logged into your Steam account on SteamDB, then return here and select Continue.\n\nThe following %{count} depot ID(s) will be scraped for %{name}:\n%{depots}\n\nSome of these may be DLC depots. Consider uninstalling DLCs before scraping.\n\nContinue?"
+    zh-CN: "将使用 Chromium 内核浏览器抓取 SteamDB。\n\n浏览器将以调试模式重启。请先确保你在 SteamDB 上登录了 Steam 账号，然后回到此处点击“继续”。\n\n即将为 %{name} 抓取以下 %{count} 个 depot ID：\n%{depots}\n\n其中可能包含 DLC depot，建议抓取前先卸载 DLC。\n\n是否继续？"
+  continue:
+    en: "Continue"
+    zh-CN: "继续"
+  update_complete:
+    en: "Manifest list has been updated."
+    zh-CN: "版本清单已更新。"
+  no_browsers:
+    en: "No supported browsers found on this system."
+    zh-CN: "未在系统中找到受支持的浏览器。"
+  select_browser_title:
+    en: "Select Browser"
+    zh-CN: "选择浏览器"
+  select_browser:
+    en: "Choose a browser to use for scraping:"
+    zh-CN: "选择用于抓取的浏览器："
+  select:
+    en: "Select"
+    zh-CN: "选择"
+
+console:
+  content:
+    en: "Content"
+    zh-CN: "内容目录"
+  content_not_found:
+    en: "Content folder not found. Run the below commands in the Steam Console, then refresh."
+    zh-CN: "未找到 content 目录。请先在 Steam 控制台执行下方命令，然后点击刷新。"
+  copy:
+    en: "Copy"
+    zh-CN: "复制"
+  files:
+    en: "files"
+    zh-CN: "个文件"
+  state_pending:
+    en: "Waiting for Steam to start…"
+    zh-CN: "等待 Steam 开始下载…"
+  state_downloading:
+    en: "Downloading"
+    zh-CN: "下载中"
+  state_downloading_full:
+    en: "Downloading · %{done} / %{total}"
+    zh-CN: "下载中 · %{done} / %{total}"
+  state_complete_full:
+    en: "Downloaded %{dl} (on disk %{disk}) · %{files} files"
+    zh-CN: "已下载 %{dl}（磁盘 %{disk}）· %{files} 个文件"
+  state_complete:
+    en: "Downloaded"
+    zh-CN: "已下载"
+  total_downloaded:
+    en: "Downloaded"
+    zh-CN: "已下载"
+  downloaded:
+    en: "Downloaded"
+    zh-CN: "已下载"
+  import_version:
+    en: "Import Version"
+    zh-CN: "导入版本"
+  open_steam_console:
+    en: "Open Steam Console"
+    zh-CN: "打开 Steam 控制台"
+  import_complete:
+    en: "Version imported successfully. Depot folders have been cleared."
+    zh-CN: "版本导入成功，depot 缓存目录已清理。"
+  import_failed:
+    en: "Import Failed"
+    zh-CN: "导入失败"
+  import_dest_exists:
+    en: "Destination folder already exists:\n%{dest}\n\nDelete it first if you want to re-import."
+    zh-CN: "目标目录已存在：\n%{dest}\n\n如需重新导入，请先删除该目录。"
+  delete_depot_title:
+    en: "Delete Depot Folder"
+    zh-CN: "删除 Depot 目录"
+  delete_depot_message:
+    en: "Permanently delete:\n%{path}"
+    zh-CN: "永久删除：\n%{path}"
+  delete_depot_failed:
+    en: "Could not delete:\n%{error}"
+    zh-CN: "删除失败：\n%{error}"
+
+downloader:
+  missing_exe:
+    en: "DepotDownloader.exe not found in the application folder."
+    zh-CN: "在程序目录中未找到 DepotDownloader.exe。"
