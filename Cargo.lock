@@ -7314,7 +7314,6 @@ dependencies = [
  "rust-i18n",
  "scraper",
  "serde",
- "thiserror 2.0.21",
  "tokio",
  "walkdir",
  "windows-registry 0.100.0",
