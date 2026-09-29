@@ -5,10 +5,8 @@ use scraper::{ElementRef, Html, Selector};
 
 use crate::constants::PATCH_TITLE_KEY;
 use crate::manifest::{ManifestEntry, ManifestMap, normalize_date, parse_manifest_date_key};
+use crate::util::parse_size_text;
 
-/// Parses a SteamDB depot manifests page into `branch -> date -> manifest_id`.
-/// Mirrors `parse_table`: the correct table carries `seen date` + `manifestid`
-/// headers; the branch comes from `code.js-branch` in the manifest cell.
 /// Result of parsing a depot manifests page: `branch -> date -> manifest_id`
 /// plus, when the table carries a size column, `manifest_id -> bytes`.
 pub struct ParsedManifests {
@@ -17,23 +15,6 @@ pub struct ParsedManifests {
     /// content decompresses on disk, so this differs from the on-disk size —
     /// it is what the Steam console itself displays.
     pub sizes: BTreeMap<String, u64>,
-}
-
-/// Converts a SteamDB size text like `"157 MB"` / `"1.2 GB"` into bytes.
-pub fn parse_size_text(text: &str) -> Option<u64> {
-    let text = text.trim().to_lowercase();
-    let mut split = text.splitn(2, ' ');
-    let number: f64 = split.next()?.replace(',', "").parse().ok()?;
-    let unit = split.next()?.trim();
-    let multiplier = match unit {
-        "b" => 1.0,
-        "kb" => 1024.0,
-        "mb" => 1024.0 * 1024.0,
-        "gb" => 1024.0 * 1024.0 * 1024.0,
-        "tb" => 1024.0f64 * 1024.0 * 1024.0 * 1024.0,
-        _ => return None,
-    };
-    Some((number * multiplier) as u64)
 }
 
 pub fn parse_manifests_table(html: &str, depot_id: &str) -> ParsedManifests {

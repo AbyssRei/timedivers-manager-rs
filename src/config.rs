@@ -10,7 +10,7 @@ pub const CONFIG_FILE: &str = "config.ron";
 pub const MANIFESTS_DIR: &str = "manifests";
 
 /// Shared RON settings: implicit `Some` keeps the files free of `Some(...)` noise.
-fn ron_options() -> Options {
+pub(crate) fn ron_options() -> Options {
     Options::default().with_default_extension(Extensions::IMPLICIT_SOME)
 }
 

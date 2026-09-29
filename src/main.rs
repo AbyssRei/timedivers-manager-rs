@@ -9,6 +9,7 @@ mod paths;
 mod scraper;
 mod steam;
 mod ui;
+mod util;
 
 use gpui_kit::*;
 
@@ -31,18 +32,7 @@ fn main() {
         gpui_kit::component::theme::Theme::sync_scrollbar_appearance(cx);
 
         open_window(
-            WindowOptions {
-                titlebar: Some(TitlebarOptions {
-                    title: Some("Timedivers Manager V2".into()),
-                    appears_transparent: false,
-                    traffic_light_position: None,
-                }),
-                window_bounds: Some(WindowBounds::Windowed(Bounds {
-                    origin: point(px(60.), px(60.)),
-                    size: size(px(900.), px(600.)),
-                })),
-                ..Default::default()
-            },
+            util::window_options("Timedivers Manager V2", (60., 60.), (900., 600.), false),
             cx,
             |window, cx| cx.new(|cx| ui::main_view::AppView::new(window, cx)),
         )

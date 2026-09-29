@@ -3,6 +3,8 @@ use std::collections::BTreeMap;
 use std::io;
 use std::path::{Path, PathBuf};
 
+use crate::config::ron_options;
+
 /// First steamapps folder that has `content/app_{app_id}` (original
 /// `_find_content_folder`).
 pub fn find_content_folder(steamapps_folders: &[String], app_id: &str) -> Option<PathBuf> {
@@ -125,8 +127,7 @@ pub struct DepotMetaEntry {
 pub type DepotMeta = BTreeMap<String, DepotMetaEntry>;
 
 pub fn load_depot_meta(path: &Path) -> DepotMeta {
-    let options =
-        ron::Options::default().with_default_extension(ron::extensions::Extensions::IMPLICIT_SOME);
+    let options = ron_options();
     std::fs::read_to_string(path)
         .ok()
         .and_then(|text| options.from_str(&text).ok())
@@ -134,8 +135,7 @@ pub fn load_depot_meta(path: &Path) -> DepotMeta {
 }
 
 pub fn save_depot_meta(path: &Path, meta: &DepotMeta) -> anyhow::Result<()> {
-    let options =
-        ron::Options::default().with_default_extension(ron::extensions::Extensions::IMPLICIT_SOME);
+    let options = ron_options();
     if let Some(parent) = path.parent() {
         std::fs::create_dir_all(parent)?;
     }
@@ -144,9 +144,6 @@ pub fn save_depot_meta(path: &Path, meta: &DepotMeta) -> anyhow::Result<()> {
     Ok(())
 }
 
-/// Learns the actual sizes of each depot cache folder (call right after a
-/// finished import, before the folders are cleared) and merges them into the
-/// depot metadata file.
 /// Human-readable byte count (KB/MB/GB with one decimal).
 pub fn format_bytes(bytes: u64) -> String {
     const KB: f64 = 1024.0;

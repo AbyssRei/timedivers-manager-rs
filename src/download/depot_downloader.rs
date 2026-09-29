@@ -57,7 +57,7 @@ pub fn run_downloader(base_dir: &Path, lines: &[String]) -> anyhow::Result<PathB
     #[cfg(windows)]
     {
         use std::os::windows::process::CommandExt as _;
-        cmd.creation_flags(crate::download::windows::CREATE_NEW_CONSOLE);
+        cmd.creation_flags(crate::constants::windows::CREATE_NEW_CONSOLE);
     }
     cmd.spawn().context("spawn DepotDownloader batch")?;
     Ok(batch_path)

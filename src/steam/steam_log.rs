@@ -150,7 +150,7 @@ mod imp {
                 let download_bytes = rest
                     .split_once(" files, ")
                     .and_then(|(_, size)| size.split(')').next())
-                    .and_then(crate::scraper::steamdb::parse_size_text)
+                    .and_then(crate::util::parse_size_text)
                     .unwrap_or(0);
                 if let Some(files) = files {
                     out.insert(

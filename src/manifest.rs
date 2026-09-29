@@ -3,20 +3,13 @@ use std::path::{Path, PathBuf};
 
 use anyhow::Context as _;
 use jiff::Timestamp;
-use ron::Options;
-use ron::extensions::Extensions;
 
-use crate::config::MANIFESTS_DIR;
+use crate::config::{MANIFESTS_DIR, ron_options};
 use crate::constants::PATCH_TITLE_KEY;
 
 /// `branch -> date -> {depot_id -> manifest_id, "patch_title" -> title}`
 pub type ManifestMap = BTreeMap<String, BTreeMap<String, ManifestEntry>>;
 pub type ManifestEntry = BTreeMap<String, String>;
-
-/// Same RON settings as `config.rs` (implicit `Some`, pretty output).
-fn ron_options() -> Options {
-    Options::default().with_default_extension(Extensions::IMPLICIT_SOME)
-}
 
 pub fn manifests_path(base_dir: &Path, app_id: &str) -> PathBuf {
     base_dir.join(MANIFESTS_DIR).join(format!("{app_id}.ron"))
@@ -35,11 +28,7 @@ pub fn load_manifest_sizes(base_dir: &Path, app_id: &str) -> ManifestSizes {
     let path = manifest_sizes_path(base_dir, app_id);
     std::fs::read_to_string(path)
         .ok()
-        .and_then(|text| {
-            let options = ron::Options::default()
-                .with_default_extension(ron::extensions::Extensions::IMPLICIT_SOME);
-            options.from_str(&text).ok()
-        })
+        .and_then(|text| ron_options().from_str(&text).ok())
         .unwrap_or_default()
 }
 
@@ -50,9 +39,7 @@ pub fn save_manifest_sizes(
 ) -> anyhow::Result<PathBuf> {
     let path = manifest_sizes_path(base_dir, app_id);
     std::fs::create_dir_all(path.parent().context("manifests dir")?)?;
-    let options =
-        ron::Options::default().with_default_extension(ron::extensions::Extensions::IMPLICIT_SOME);
-    let text = options
+    let text = ron_options()
         .to_string(sizes)
         .context("serialize manifest sizes")?;
     std::fs::write(&path, text).with_context(|| format!("write {}", path.display()))?;
