@@ -711,22 +711,15 @@ impl Render for ConsoleView {
 
         // Overall progress: byte total across depots; percentage only when
         // every depot has a known expected size.
-        let total_bytes: u64 = self.depot_watches.iter().map(|w| w.bytes).sum();
-        let expected_total: Option<u64> = {
-            let expected: Vec<u64> = self
-                .depot_watches
-                .iter()
-                .filter_map(|w| w.expected_bytes)
-                .collect();
-            (expected.len() == self.depots.len() && !expected.is_empty())
-                .then(|| expected.iter().sum())
-        };
-        // 会话内各 depot 的 stage 总量（来自 Steam 日志）是磁盘字节数的
-        // 精确分母；无会话数据时回退到学习/SteamDB 期望。
-        let overall_denominator: Option<u64> = if self.session_totals.is_empty() {
-            expected_total
-        } else {
-            Some(self.session_totals.values().map(|(_, stage)| stage).sum())
+        // 只统计缓存目录仍有内容的 depot（Steam 已开始下载的）：
+        // 未开始/已删除的 depot 不计入，避免旧会话期望污染总体比例。
+        let active: Vec<&DepotWatch> = self.depot_watches.iter().filter(|w| w.bytes > 0).collect();
+        let total_bytes: u64 = active.iter().map(|w| w.bytes).sum();
+        let overall_denominator: Option<u64> = {
+            let expected: Vec<u64> = active.iter().filter_map(|w| w.expected_bytes).collect();
+            // 部分 depot 缺期望值（会话行尚未解析到）时不显示比例，
+            // 避免高估进度。
+            (expected.len() == active.len() && !expected.is_empty()).then(|| expected.iter().sum())
         };
         let overall_fill = overall_denominator
             .map(|expected| (total_bytes as f64 / expected.max(1) as f64).clamp(0., 1.) as f32);
