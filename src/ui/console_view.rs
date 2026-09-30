@@ -519,6 +519,12 @@ impl Render for ConsoleView {
     fn render(&mut self, _: &mut Window, cx: &mut Context<Self>) -> impl IntoElement {
         let content_folder = self.content_folder();
         let all_complete = self.all_complete();
+        // Steam 尚未开始任何 depot 下载时，总体条没有信息量（分母会是
+        // 旧会话残留），隐藏到出现第一个非 Pending 的 depot。
+        let any_active = self
+            .depot_watches
+            .iter()
+            .any(|w| w.phase != DepotPhase::Pending);
         let any_downloading = self
             .depot_watches
             .iter()
@@ -754,7 +760,7 @@ impl Render for ConsoleView {
             .gap_2()
             .child(header)
             .child(div().h(px(1.)).w_full().bg(cx.theme().border))
-            .child(
+            .children(any_active.then(|| {
                 gpui_kit::component::h_flex()
                     .items_center()
                     .gap_2()
@@ -767,8 +773,8 @@ impl Render for ConsoleView {
                                 "{} · {overall_text}",
                                 rust_i18n::t!("console.total_downloaded")
                             ))),
-                    ),
-            )
+                    )
+            }))
             .child(
                 div()
                     .id("depot-scroll")
